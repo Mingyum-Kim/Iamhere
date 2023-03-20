@@ -1,5 +1,3 @@
-HELP.md
-iamhere.iml
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

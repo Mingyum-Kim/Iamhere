@@ -1,13 +1,13 @@
-package com.personal.iamhere;
+package com.personal.member;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IamhereApplication {
+public class MemberApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(IamhereApplication.class, args);
+        SpringApplication.run(MemberApplication.class, args);
     }
 
 }
