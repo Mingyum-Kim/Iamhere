@@ -53,7 +53,7 @@
 
 - 회원 관리 마이크로 서비스
     
-    (1) 회원 가입 
+    **(1) 회원 가입**
     
     - 입력값 (유효성 검사)
         - **아이디** : 4 ~ 12자의 영문 대소문자와 숫자로만 입력 (중복 불가, 변경 불가)
@@ -69,7 +69,7 @@
         - 아이디 찾기 : 이메일 인증 → 아이디의 일부를 노출함.
         - 비밀번호 찾기 : 이메일 인증 → 임시 비밀번호 발급
     
-    (2) 로그인 
+    **(2) 로그인**
     
     - 로그인을 하지 않은 경우 볼 수 있는 페이지
         - 메인 페이지
@@ -83,13 +83,13 @@
         - 아이디와 비밀번호가 일치하면 메인 페이지로 이동하기
         - 로그인 상태 유지 기능
     
-    (3) 소셜 로그인 
+    **(3) 소셜 로그인**
     
     - 구글, 페이스북, 트위터, 네이버, 카카오 소셜 로그인 연동 기능 제공
     - 인증 및 약관동의와 필수 제공 항목 (이메일, 성별, 생년월일)과 회원 정보(내/외국인, 거주 지역) 입력으로 회원가입 완료
     - 이미 가입되어있는 사용자가 소셜 로그인을 시도하는 경우, 두 계정이 자동 연동된다.
     
-    (4) 마이페이지
+    **(4) 마이페이지**
     
     - 회원 정보 수정
         - 이메일 인증번호 확인 후 이메일 수정 가능 (중복 불가)
@@ -108,12 +108,12 @@
 - (1) 회원 관리 페이지
     - 회원가입
         
-        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c96a482-504b-4e74-bd86-d8e7bc80d87c/Untitled.png)
-        
+    <img width="516" alt="image" src="https://user-images.githubusercontent.com/67851124/226255129-0bcd2e7a-69d0-4a23-a3f4-aee5c0a3b8b3.png">
+
     - 로그인
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4ac08828-a875-4f1f-aaeb-35922f1e28f4/Untitled.png)
-    
+<img width="606" alt="image" src="https://user-images.githubusercontent.com/67851124/226255160-8e0146f2-5301-4919-8998-f586df7e35b4.png">    
+
 
 ### 데이터베이스 설계
 
@@ -121,7 +121,9 @@
     
     관계형 데이터베이스 (MariaDB) 사용
     
-    [User API] <img width="303" alt="image" src="https://user-images.githubusercontent.com/67851124/226254544-81cae8bf-deba-4ea5-b0db-078890b6da94.png">
+    **USER**
+    
+    <img width="600" alt="image" src="https://user-images.githubusercontent.com/67851124/226254544-81cae8bf-deba-4ea5-b0db-078890b6da94.png">
 
     
 
@@ -129,4 +131,6 @@
 
 - (1) 회원 관리 API 설계
     
-    [User API] <img width="575" alt="image" src="https://user-images.githubusercontent.com/67851124/226254458-94f29671-0110-4873-a155-c0d27fa39463.png">
+    **USER**
+    
+    <img width="800" alt="image" src="https://user-images.githubusercontent.com/67851124/226254458-94f29671-0110-4873-a155-c0d27fa39463.png">
