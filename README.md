@@ -8,7 +8,7 @@
 
 프로젝트명 : Iamhere
 
-일정 : 2023.03.21 ~ 2023.04.11 (3주)
+일정 : 2023.04.11 ~ 2023.05.04(3주)
 
 주요 기능
 
@@ -21,7 +21,7 @@
 **백엔드**
 
 - 개발 언어 : Java 17
-- 개발 환경 : Spring Boot 3.0.4, Gradle, Spring Security, OAuth, JPA, Lombok, Kafka
+- 개발 환경 : Spring Boot 3.0.4, Gradle, Junit5 Spring Security, OAuth, JPA, Lombok, Kafka
 - 데이터베이스 : MySQL, MongoDB
 - 형상 관리 툴 : Github
 - 아키텍쳐: MSA
