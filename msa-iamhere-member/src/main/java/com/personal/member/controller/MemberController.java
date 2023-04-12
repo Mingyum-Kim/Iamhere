@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<Long> insertMember(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Long> insertMember(@RequestBody MemberDTO memberDTO) throws Exception {
         return ResponseEntity.ok(memberService.insertMember(memberDTO));
     }
 }
