@@ -32,7 +32,6 @@ dependencies {
     // implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
     // implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     // implementation 'org.springframework.kafka:spring-kafka'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
@@ -67,5 +66,12 @@ subprojects{
     dependencies{
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    }
+}
+
+allprojects{
+    dependencies{
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
     }
 }

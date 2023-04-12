@@ -13,8 +13,11 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.1'
     implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.bo ot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.0.5'
 }
 
 tasks.named('test') {
