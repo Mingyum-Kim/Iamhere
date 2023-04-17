@@ -2,6 +2,7 @@ package com.personal.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.member.dto.MemberDTO;
+import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +38,9 @@ class MemberControllerTest {
     @MockBean
     private MemberService memberService;
 
+    @MockBean
+    private MailService mailService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -60,5 +64,19 @@ class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(memberDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
+    }
+
+    @DisplayName("인증메일을 정상적으로 발송한다.")
+    @Test
+    void sendMail() throws Exception {
+        String to = "gms08184@gmail.com";
+        String key = "3pqb9qKf";
+        when(mailService.sendSimpleMessage(to)).thenReturn(key);
+
+        // when
+        mockMvc.perform(post("/join/confirm")
+                .param("mail", to))
+                .andExpect(status().isOk())
+                .andExpect(content().string(key));
     }
 }
