@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
@@ -25,7 +26,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.insertMember(memberDTO));
     }
 
-    @PostMapping("/join/confirm")
+    @PostMapping("/join/congfirm")
     @ResponseBody
     public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
         String code = mailService.sendSimpleMessage(mail);

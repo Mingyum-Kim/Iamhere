@@ -17,7 +17,7 @@ public class MemberService {
 
     public Long insertMember(MemberDTO memberDTO) throws Exception {
         if (this.isEmailExists(memberDTO.getMail())) {
-            throw new Exception("Your Mail already Exists");
+            throw new RuntimeException("The mail is already exist!");
         }
         Member member = memberDTO.toEntity();
         member.hashPassword(bCryptPasswordEncoder);
