@@ -93,4 +93,23 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(key));
     }
+
+    @DisplayName("로그인에 성공한다.")
+    @Test
+    void login_success() throws Exception {
+
+    }
+
+    @DisplayName("Id가 존재하지 않아 로그인에 실패한다.")
+    @Test
+    void login_notfound() throws Exception{
+
+    }
+
+    @DisplayName("password가 일치하지 않아 로그인에 실패한다.")
+    @Test
+    void login_unauthorized() throws Exception{
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.personal.member.service;
 
 import com.personal.member.domain.Member;
+import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.exception.AppException;
 import com.personal.member.exception.ErrorCode;
@@ -18,9 +19,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long insertMember(MemberDTO memberDTO) throws Exception {
+    public Long insertMember(MemberDTO memberDTO) {
         if (this.isEmailExists(memberDTO.getMail())) {
-            throw new AppException(ErrorCode.MAIL_DUPLICATED, "The mail is already exist!");
+            throw new AppException(ErrorCode.MAIL_DUPLICATED);
         }
         Member member = memberDTO.toEntity();
         member.setPassword(bCryptPasswordEncoder.encode(memberDTO.getPassword()));
@@ -39,5 +40,17 @@ public class MemberService {
 
     public boolean matchPassword(String rawPassword, String encodedPassword){
         return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public String login(LoginDTO loginDTO) {
+        Member member = memberRepository.findByMail(loginDTO.getMail())
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+
+        String encodedPassword = bCryptPasswordEncoder.encode(loginDTO.getPassword());
+        if(bCryptPasswordEncoder.matches(encodedPassword, member.getPassword())){
+            return member.getMail();
+        } else {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 }
