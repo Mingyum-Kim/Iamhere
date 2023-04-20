@@ -59,11 +59,25 @@ class MemberControllerTest {
         when(memberService.insertMember(any(MemberDTO.class))).thenReturn(1L);
 
         // when
-        mockMvc.perform(post("/join")
+        mockMvc.perform(post("/api/v1/members/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
+    }
+
+    @DisplayName("이메일 중복으로 회원가입에 실패한다.")
+    @Test
+    public void insertMember_fail() throws Exception {
+        // given
+        MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
+        when(memberService.insertMember(any(MemberDTO.class))).thenThrow(new RuntimeException("he mail is already exist!"));
+
+        // when
+        mockMvc.perform(post("/api/v1/members/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTO)))
+                .andExpect(status().isConflict());
     }
 
     @DisplayName("인증메일을 정상적으로 발송한다.")
