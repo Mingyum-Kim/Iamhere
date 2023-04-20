@@ -21,10 +21,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 public class SecurityConfig  {
 
     private static final String ENCODED_PASSWORD = "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -56,7 +52,6 @@ public class SecurityConfig  {
                         .httpBasic().disable();
         return http.build();
     }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -80,8 +75,6 @@ public class SecurityConfig  {
         return new InMemoryUserDetailsManager(user, admin);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
+
 }
