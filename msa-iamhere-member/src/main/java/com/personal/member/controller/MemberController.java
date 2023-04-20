@@ -26,7 +26,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.insertMember(memberDTO));
     }
 
-    @PostMapping("/join/congfirm")
+    @PostMapping("/join/confirm")
     @ResponseBody
     public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
         String code = mailService.sendSimpleMessage(mail);

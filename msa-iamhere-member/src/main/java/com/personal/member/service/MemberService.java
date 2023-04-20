@@ -2,6 +2,8 @@ package com.personal.member.service;
 
 import com.personal.member.domain.Member;
 import com.personal.member.dto.MemberDTO;
+import com.personal.member.exception.AppException;
+import com.personal.member.exception.ErrorCode;
 import com.personal.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +19,7 @@ public class MemberService {
 
     public Long insertMember(MemberDTO memberDTO) throws Exception {
         if (this.isEmailExists(memberDTO.getMail())) {
-            throw new RuntimeException("The mail is already exist!");
+            throw new AppException(ErrorCode.MAIL_DUPLICATED, "The mail is already exist!");
         }
         Member member = memberDTO.toEntity();
         member.hashPassword(bCryptPasswordEncoder);
