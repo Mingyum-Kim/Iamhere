@@ -3,6 +3,8 @@ package com.personal.member.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
+import com.personal.member.exception.AppException;
+import com.personal.member.exception.ErrorCode;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,13 +115,29 @@ class MemberControllerTest {
     @DisplayName("Id가 존재하지 않아 로그인에 실패한다.")
     @Test
     void login_notfound() throws Exception{
+        String mail = "asdf1221@naver.com";
+        String password = "asdf1234";
+        LoginDTO loginDTO = new LoginDTO(mail, password);
+        when(memberService.login(loginDTO)).thenThrow(new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
+        mockMvc.perform(post("/api/v1/members/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isNotFound());
     }
 
     @DisplayName("password가 일치하지 않아 로그인에 실패한다.")
     @Test
     void login_unauthorized() throws Exception{
+        String mail = "asdf1221@naver.com";
+        String password = "asdf1234";
+        LoginDTO loginDTO = new LoginDTO(mail, password);
+        when(memberService.login(loginDTO)).thenThrow(new AppException(ErrorCode.INVALID_PASSWORD));
 
+        mockMvc.perform(post("/api/v1/members/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isUnauthorized());
     }
 
 }
