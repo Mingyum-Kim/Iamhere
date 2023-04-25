@@ -1,6 +1,7 @@
 package com.personal.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
@@ -88,7 +89,7 @@ class MemberControllerTest {
         when(mailService.sendSimpleMessage(to)).thenReturn(key);
 
         // when
-        mockMvc.perform(post("/join/confirm")
+        mockMvc.perform(post("/api/v1/members/join/confirm")
                 .param("mail", to))
                 .andExpect(status().isOk())
                 .andExpect(content().string(key));
@@ -97,7 +98,16 @@ class MemberControllerTest {
     @DisplayName("로그인에 성공한다.")
     @Test
     void login_success() throws Exception {
+        String mail = "asdf1221@naver.com";
+        String password = "asdf1234";
+        LoginDTO loginDTO = new LoginDTO(mail, password);
+        when(memberService.login(loginDTO)).thenReturn(mail);
 
+        // when
+        mockMvc.perform(post("/api/v1/members/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isOk());
     }
 
     @DisplayName("Id가 존재하지 않아 로그인에 실패한다.")

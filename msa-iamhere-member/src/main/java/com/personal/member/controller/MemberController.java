@@ -33,6 +33,5 @@ public class MemberController {
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok(memberService.login(loginDTO));
-
     }
 }

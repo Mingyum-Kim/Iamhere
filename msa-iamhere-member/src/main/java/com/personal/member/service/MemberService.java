@@ -46,8 +46,7 @@ public class MemberService {
         Member member = memberRepository.findByMail(loginDTO.getMail())
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
-        String encodedPassword = bCryptPasswordEncoder.encode(loginDTO.getPassword());
-        if(bCryptPasswordEncoder.matches(encodedPassword, member.getPassword())){
+        if(bCryptPasswordEncoder.matches(loginDTO.getPassword(), member.getPassword())){
             return member.getMail();
         } else {
             throw new AppException(ErrorCode.INVALID_PASSWORD);

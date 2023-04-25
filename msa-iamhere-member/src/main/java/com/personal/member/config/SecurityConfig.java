@@ -29,7 +29,8 @@ public class SecurityConfig  {
         http.csrf().disable().cors().disable()
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/join/*").permitAll()
+                        .requestMatchers("/api/v1/members/join").permitAll()
+                        .requestMatchers("/api/v1/members/login").permitAll()
                         // .requestMatchers("/join/confirm").permitAll()
                         // .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .anyRequest().authenticated()
