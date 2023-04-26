@@ -6,7 +6,9 @@ import com.personal.member.dto.MemberDTO;
 import com.personal.member.exception.AppException;
 import com.personal.member.exception.ErrorCode;
 import com.personal.member.repository.MemberRepository;
+import com.personal.member.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,10 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${jwt.token.secret}")
+    private String key;
+    private Long expireTimeMs = 1000 * 60 * 60L;
 
     public Long insertMember(MemberDTO memberDTO) {
         if (this.isEmailExists(memberDTO.getMail())) {
@@ -46,8 +52,9 @@ public class MemberService {
         Member member = memberRepository.findByMail(loginDTO.getMail())
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
-        if(bCryptPasswordEncoder.matches(loginDTO.getPassword(), member.getPassword())){
-            return member.getMail();
+        if (bCryptPasswordEncoder.matches(loginDTO.getPassword(), member.getPassword())) {
+            String token = JwtTokenUtil.createToken(member.getMail(), key, expireTimeMs);
+            return token;
         } else {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
