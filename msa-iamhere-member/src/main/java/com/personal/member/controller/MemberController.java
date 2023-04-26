@@ -1,5 +1,6 @@
 package com.personal.member.controller;
 
+import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
@@ -16,11 +17,6 @@ public class MemberController {
 
     private final MailService mailService;
 
-    @GetMapping("/")
-    public String home(){
-        return "Hello, world!";
-    }
-
     @PostMapping("/join")
     public ResponseEntity<Long> insertMember(@RequestBody MemberDTO memberDTO) throws Exception {
         return ResponseEntity.ok(memberService.insertMember(memberDTO));
@@ -31,5 +27,11 @@ public class MemberController {
     public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
         String code = mailService.sendSimpleMessage(mail);
         return ResponseEntity.ok(code);
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(memberService.login(loginDTO));
     }
 }
