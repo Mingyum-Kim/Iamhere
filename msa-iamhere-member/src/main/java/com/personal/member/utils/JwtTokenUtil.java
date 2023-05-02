@@ -8,6 +8,11 @@ import java.util.Date;
 
 public class JwtTokenUtil {
 
+    public static String getMail(String token, String secretKey){
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("mail", String.class);
+    }
+
     public static boolean isExpired(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().getExpiration().before(new Date());

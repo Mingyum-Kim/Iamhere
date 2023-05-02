@@ -44,7 +44,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
 
-        String mail = "";
+        String mail = JwtTokenUtil.getMail(token, secretKey);
+        log.info("mail : {}", mail);
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(mail, null, List.of(new SimpleGrantedAuthority("MEMBER")));
