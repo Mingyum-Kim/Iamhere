@@ -73,5 +73,6 @@ subprojects{
 allprojects{
     dependencies{
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     }
 }
