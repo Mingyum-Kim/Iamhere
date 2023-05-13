@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter @Setter
@@ -22,7 +22,7 @@ public class Member{
 
     private Date birth;
 
-    private LocalDateTime joinedAt = LocalDateTime.now();
+    private LocalDate joinedAt = LocalDate.now();
 
     public Member hashPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(this.password);
