@@ -25,14 +25,14 @@ public class MemberService {
     private String key;
     private Long expireTimeMs = 1000 * 60 * 60L;
 
-    public Long insertMember(MemberDTO memberDTO) {
+    public Member insertMember(MemberDTO memberDTO) {
         if (this.isEmailExists(memberDTO.getMail())) {
             throw new AppException(ErrorCode.MAIL_DUPLICATED);
         }
         Member member = memberDTO.toEntity();
         member.setPassword(bCryptPasswordEncoder.encode(memberDTO.getPassword()));
 
-        return memberRepository.save(member).getId();
+        return memberRepository.save(member);
     }
 
     public Optional<Member> findById(Long memberId){
