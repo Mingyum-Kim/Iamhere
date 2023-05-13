@@ -1,6 +1,7 @@
 package com.personal.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.personal.member.domain.Member;
 import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.exception.AppException;
@@ -61,7 +62,7 @@ class MemberControllerTest {
     void insertMember() throws Exception {
         // given
         MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
-        when(memberService.insertMember(any(MemberDTO.class))).thenReturn(1L);
+        when(memberService.insertMember(any(MemberDTO.class))).thenReturn(memberDTO.toEntity());
 
         // when
         mockMvc.perform(post("/api/v1/members/join")
@@ -69,7 +70,7 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("1"));
+                .andExpect(content().string(objectMapper.writeValueAsString(memberDTO.toEntity())));
     }
 
     @DisplayName("이메일 중복으로 회원가입에 실패한다.")
