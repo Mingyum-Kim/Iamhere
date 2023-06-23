@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Service
-public class RegisterMail implements MailService {
+public class MailServiceImpl implements MailService {
 
     @Autowired
     private JavaMailSender emailSender;

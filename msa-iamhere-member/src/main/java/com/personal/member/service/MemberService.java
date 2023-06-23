@@ -10,7 +10,6 @@ import com.personal.member.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,7 +24,7 @@ public class MemberService {
     private String key;
     private Long expireTimeMs = 1000 * 60 * 60L;
 
-    public Member insertMember(MemberDTO memberDTO) {
+    public Member join(MemberDTO memberDTO) {
         if (this.isEmailExists(memberDTO.getMail())) {
             throw new AppException(ErrorCode.MAIL_DUPLICATED);
         }
