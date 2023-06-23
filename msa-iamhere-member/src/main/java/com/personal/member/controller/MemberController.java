@@ -6,10 +6,12 @@ import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,10 +23,12 @@ public class MemberController {
 
     private final MailService mailService;
 
-    private final HttpSession session;
+    private final HttpServletRequest request;
 
     @PostMapping("/join")
-    public ResponseEntity<Member> join(@RequestBody MemberDTO memberDTO) throws Exception {
+    public ResponseEntity<?> join(@RequestBody MemberDTO memberDTO, @SessionAttribute(name = "mailVerified", required = false) Boolean mailVerified) throws Exception {
+        if(mailVerified == null || !mailVerified)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("이메일 인증이 완료되지 않았습니다.");
         return ResponseEntity.ok(memberService.join(memberDTO));
     }
 
@@ -42,8 +46,9 @@ public class MemberController {
     public ResponseEntity<Boolean> verifyMail(@RequestParam("verificationCode") String verificationCode,
                                               @RequestParam("mail") String mail,
                                               @CookieValue(value = "verificationCode") String storedVerificationCode) {
+        HttpSession session = request.getSession();
         boolean isVerified = false;
-        if (verificationCode.equals(storedVerificationCode)){
+        if (verificationCode.equals(storedVerificationCode)) {
             isVerified = true;
             session.setAttribute("mailVerified", true);
             session.setAttribute("userMail", mail);

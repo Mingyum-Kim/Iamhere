@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +48,9 @@ class MemberControllerTest {
     @MockBean
     private MailService mailService;
 
+    @MockBean
+    private HttpServletRequest request;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -58,7 +63,25 @@ class MemberControllerTest {
 
     @DisplayName("회원가입에 성공한다.")
     @Test
-    void insertMember() throws Exception {
+    void join() throws Exception {
+        // given
+
+        MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
+        when(memberService.join(any(MemberDTO.class))).thenReturn(memberDTO.toEntity());
+
+        // when
+        mockMvc.perform(post("/api/v1/members/join")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTO))
+                        .sessionAttr("mailVerified", true))
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(memberDTO.toEntity())));
+    }
+
+    @DisplayName("이메일 인증을 완료하지 않아 회원가입에 실패한다.")
+    @Test
+    void joinWithoutVerification() throws Exception {
         // given
         MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
         when(memberService.join(any(MemberDTO.class))).thenReturn(memberDTO.toEntity());
@@ -68,9 +91,9 @@ class MemberControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberDTO)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(memberDTO.toEntity())));
+                .andExpect(status().isForbidden());
     }
+
 
     @DisplayName("이메일 중복으로 회원가입에 실패한다.")
     @Test
@@ -83,14 +106,15 @@ class MemberControllerTest {
         mockMvc.perform(post("/api/v1/members/join")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberDTO)))
+                        .content(objectMapper.writeValueAsString(memberDTO))
+                        .sessionAttr("mailVerified", true))
                 .andExpect(status().isConflict());
     }
 
     @DisplayName("인증메일을 정상적으로 발송한다.")
     @Test
     void sendMail() throws Exception {
-        String to = "gms08184@gmail.com";
+        String to = "gms08194@gmail.com";
         String key = "3pqb9qKf";
         when(mailService.sendSimpleMessage(to)).thenReturn(key);
 
