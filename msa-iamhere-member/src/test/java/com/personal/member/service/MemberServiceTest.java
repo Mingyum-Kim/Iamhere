@@ -60,7 +60,7 @@ class MemberServiceTest {
         when(memberRepository.findByMail(any(String.class))).thenReturn(Optional.empty());
 
         // when
-        Member member =  memberService.insertMember(memberDTO);
+        Member member =  memberService.join(memberDTO);
 
         // then
         assertEquals(member.getPassword(), encoded);
