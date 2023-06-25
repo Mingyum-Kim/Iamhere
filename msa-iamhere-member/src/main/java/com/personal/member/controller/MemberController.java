@@ -1,11 +1,11 @@
 package com.personal.member.controller;
 
-import com.personal.member.domain.Member;
 import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
@@ -25,6 +27,8 @@ public class MemberController {
 
     private final HttpServletRequest request;
 
+    private final HttpServletResponse response;
+
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody MemberDTO memberDTO, @SessionAttribute(name = "mailVerified", required = false) Boolean mailVerified) throws Exception {
         if(mailVerified == null || !mailVerified)
@@ -34,7 +38,7 @@ public class MemberController {
 
     @PostMapping("/join/confirm")
     @ResponseBody
-    public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail, HttpServletResponse response) throws Exception {
+    public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
         String code = mailService.sendSimpleMessage(mail);
         Cookie verificationCookie = new Cookie("verificationCode", code);
         verificationCookie.setMaxAge(180);
