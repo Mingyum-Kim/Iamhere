@@ -32,4 +32,9 @@ public class Posts extends CommonDateEntity{
     public static Posts save(String title, String content){
         return new Posts(title, content);
     }
+
+    public void setTitleContent(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

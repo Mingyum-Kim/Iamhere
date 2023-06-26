@@ -5,7 +5,7 @@ import lombok.*;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-public class PostSaveRequestDto {
+public class PostRequestDto {
     private String title;
     private String content;
 

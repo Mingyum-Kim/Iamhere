@@ -1,16 +1,16 @@
 package com.personal.post.controller;
 
 import com.personal.post.domain.Posts;
-import com.personal.post.domain.dto.PostSaveRequestDto;
+import com.personal.post.domain.dto.PostRequestDto;
 import com.personal.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController("/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -18,7 +18,31 @@ public class PostController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Posts> save(@RequestBody PostSaveRequestDto dto) {
-        return ResponseEntity.ok(postService.save(dto));
+    public ResponseEntity<Posts> save(@RequestBody PostRequestDto dto) {
+        return new ResponseEntity(postService.save(dto), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity<Posts> update(@RequestParam Long id, @RequestBody PostRequestDto dto){
+        return new ResponseEntity(postService.update(id, dto), HttpStatus.OK);
+    }
+
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<List<Posts>> getPosts() {
+        return new ResponseEntity(postService.getPosts(), HttpStatus.OK);
+    }
+
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<Posts> getPost(@RequestParam Long id){
+        return new ResponseEntity(postService.getPost(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity deletePost(@RequestParam Long id) {
+        postService.deletePost(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
