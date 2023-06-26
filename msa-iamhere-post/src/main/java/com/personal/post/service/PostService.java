@@ -2,6 +2,7 @@ package com.personal.post.service;
 
 import com.personal.post.domain.Posts;
 import com.personal.post.domain.dto.PostRequestDto;
+import com.personal.post.domain.dto.PostResponseDto;
 import com.personal.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +28,12 @@ public class PostService{
         return postRepository.save(post);
     }
 
-    public List<Posts> getPosts() {
-        return postRepository.findAll();
+    public List<PostResponseDto> getPosts() {
+        return postRepository.findAllPosts();
     }
 
-    public Posts getPost(Long id) {
-        return postRepository.findById(id)
+    public PostResponseDto getPost(Long id) {
+        return postRepository.findPostById(id)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
