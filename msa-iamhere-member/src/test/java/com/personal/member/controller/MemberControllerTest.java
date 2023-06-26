@@ -58,7 +58,7 @@ class MemberControllerTest {
 
     @DisplayName("회원가입에 성공한다.")
     @Test
-    void insertMember() throws Exception {
+    public void insertMember() throws Exception {
         // given
         MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
         when(memberService.insertMember(any(MemberDTO.class))).thenReturn(1L);
@@ -89,7 +89,7 @@ class MemberControllerTest {
 
     @DisplayName("인증메일을 정상적으로 발송한다.")
     @Test
-    void sendMail() throws Exception {
+    public void sendMail() throws Exception {
         String to = "gms08184@gmail.com";
         String key = "3pqb9qKf";
         when(mailService.sendSimpleMessage(to)).thenReturn(key);
@@ -105,7 +105,7 @@ class MemberControllerTest {
     @DisplayName("로그인에 성공한다.")
     @Test
     @WithAnonymousUser
-    void login_success() throws Exception {
+    public void login_success() throws Exception {
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         String token = "token";
@@ -124,7 +124,7 @@ class MemberControllerTest {
     @DisplayName("Id가 존재하지 않아 로그인에 실패한다.")
     @Test
     @WithAnonymousUser
-    void login_notfound() throws Exception{
+    public void login_notfound() throws Exception{
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         LoginDTO loginDTO = new LoginDTO(mail, password);
@@ -140,7 +140,7 @@ class MemberControllerTest {
     @DisplayName("password가 일치하지 않아 로그인에 실패한다.")
     @Test
     @WithAnonymousUser
-    void login_unauthorized() throws Exception{
+    public void login_unauthorized() throws Exception{
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         LoginDTO loginDTO = new LoginDTO(mail, password);
