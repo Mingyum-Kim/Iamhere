@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql
+  datasource:
+    url: jdbc:mariadb://localhost:3306/Iamhere?characterEncoding=UTF-8
+    username: root
+    password: asdf1234!
+    driver-class-name: org.mariadb.jdbc.Driver
