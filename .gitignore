@@ -38,3 +38,8 @@ out/
 
 ### VS Code ###
 .vscode/
+msa-iamhere-member/src/main/resources/application.yml
+src/main/resources/application.yml
+.env
+.env
+.env

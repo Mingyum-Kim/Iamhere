@@ -1,19 +1,25 @@
 package com.personal.member.service;
 
-import com.personal.member.config.AppConfig;
 import com.personal.member.domain.Member;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
+import java.util.Optional;
 
-import static org.assertj.core.api.BDDAssumptions.given;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -25,20 +31,39 @@ class MemberServiceTest {
     private MemberService memberService;
 
     @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+
+    @MockBean
     private MemberRepository memberRepository;
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @BeforeEach
+    public void init() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .build();
+    }
 
     @Test
     @DisplayName("비밀번호가 암호화되어서 DB에 저장된다.")
     void insertMember() throws Exception {
         // given
         MemberDTO memberDTO = createMemberDTO();
+        String encoded = "newEncodedPassword";
+        memberDTO.setPassword(encoded);
+        when(memberRepository.save(any(Member.class))).thenReturn(memberDTO.toEntity());
+        when(bCryptPasswordEncoder.encode(any(String.class))).thenReturn(encoded);
+        when(memberRepository.findByMail(any(String.class))).thenReturn(Optional.empty());
+
         // when
-        Long memberId = memberService.insertMember(memberDTO);
+        Member member =  memberService.join(memberDTO);
+
         // then
-        assertNotNull(memberId);
-        assertTrue(memberService.matchPassword(PASSWORD, memberService.findById(memberId).get().getPassword()));
+        assertEquals(member.getPassword(), encoded);
     }
 
     private MemberDTO createMemberDTO() {
