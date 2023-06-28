@@ -6,6 +6,7 @@ import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,4 +66,12 @@ public class MemberController {
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok(memberService.login(loginDTO));
     }
+
+    @GetMapping("/nickname")
+    @ResponseBody
+    public ResponseEntity<String> getNickname(@RequestParam Long id) {
+        System.out.println("getNickname 함수 실행");
+        return ResponseEntity.ok(memberService.getNickname(id));
+    }
+
 }

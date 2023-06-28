@@ -58,4 +58,10 @@ public class MemberService {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
     }
+
+    public String getNickname(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+        return member.getNickname();
+    }
 }

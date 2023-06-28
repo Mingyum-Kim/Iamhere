@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,7 +64,6 @@ class PostControllerTest {
         when(postService.save(any())).thenReturn(expected);
 
         String responseBody = mockMvc.perform(post("/api/v1/posts")
-                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
@@ -84,7 +81,6 @@ class PostControllerTest {
         when(postService.update(anyLong(), any())).thenReturn(expected);
 
         String responseBody = mockMvc.perform(put("/api/v1/posts")
-                        .with(csrf())
                         .param("id", "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -102,7 +98,6 @@ class PostControllerTest {
         when(postService.getPost(anyLong())).thenReturn(expected);
 
         String responseBody = mockMvc.perform(get("/api/v1/posts")
-                        .with(csrf())
                         .param("id", "1"))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -121,8 +116,7 @@ class PostControllerTest {
         expected.add(dto2);
         when(postService.getPosts()).thenReturn(expected);
 
-        String responseBody = mockMvc.perform(get("/api/v1/posts/all")
-                        .with(csrf()))
+        String responseBody = mockMvc.perform(get("/api/v1/posts/all"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse().getContentAsString();
@@ -137,7 +131,6 @@ class PostControllerTest {
         doNothing().when(postService).deletePost(anyLong());
 
         mockMvc.perform(delete("/api/v1/posts")
-                        .with(csrf())
                         .param("id", "1"))
                 .andExpect(status().isNoContent());
     }
