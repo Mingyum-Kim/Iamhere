@@ -20,12 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -106,6 +108,7 @@ class MemberControllerTest {
         // given
         MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
         when(memberService.join(any(MemberDTO.class))).thenThrow(new RuntimeException("he mail is already exist!"));
+        doNothing().when(response).addCookie(any(Cookie.class));
 
         // when
         mockMvc.perform(post("/api/v1/members/join")
@@ -125,7 +128,7 @@ class MemberControllerTest {
 
          mockMvc.perform(post("/api/v1/members/join/confirm")
                         .with(csrf())
-                        .param("mail", to))
+                         .param("mail", to))
                 .andExpect(status().isOk())
                 .andExpect(content().string(key));
     }

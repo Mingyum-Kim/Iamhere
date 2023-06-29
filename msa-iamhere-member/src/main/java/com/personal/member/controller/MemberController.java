@@ -6,7 +6,6 @@ import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +25,6 @@ public class MemberController {
 
     private final MailService mailService;
 
-    private final HttpServletRequest request;
-
-    private final HttpServletResponse response;
-
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody MemberDTO memberDTO, @SessionAttribute(name = "mailVerified", required = false) Boolean mailVerified) throws Exception {
         if(mailVerified == null || !mailVerified)
@@ -39,7 +34,8 @@ public class MemberController {
 
     @PostMapping("/join/confirm")
     @ResponseBody
-    public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
+    public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail,
+                                              @RequestAttribute HttpServletResponse response) throws Exception {
         String code = mailService.sendSimpleMessage(mail);
         Cookie verificationCookie = new Cookie("verificationCode", code);
         verificationCookie.setMaxAge(180);
@@ -48,7 +44,8 @@ public class MemberController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Boolean> verifyMail(@RequestParam("verificationCode") String verificationCode,
+    public ResponseEntity<Boolean> verifyMail(@RequestAttribute HttpServletRequest request,
+                                              @RequestParam("verificationCode") String verificationCode,
                                               @RequestParam("mail") String mail,
                                               @CookieValue(value = "verificationCode") String storedVerificationCode) {
         HttpSession session = request.getSession();

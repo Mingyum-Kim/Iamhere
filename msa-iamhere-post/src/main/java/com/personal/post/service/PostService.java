@@ -7,6 +7,7 @@ import com.personal.post.domain.dto.PostResponseDto;
 import com.personal.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
