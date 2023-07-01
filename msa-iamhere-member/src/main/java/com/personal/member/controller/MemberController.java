@@ -4,16 +4,15 @@ import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 @Slf4j
@@ -25,10 +24,6 @@ public class MemberController {
 
     private final MailService mailService;
 
-    private final HttpServletRequest request;
-
-    private final HttpServletResponse response;
-
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody MemberDTO memberDTO, @SessionAttribute(name = "mailVerified", required = false) Boolean mailVerified) throws Exception {
         if(mailVerified == null || !mailVerified)
@@ -38,7 +33,8 @@ public class MemberController {
 
     @PostMapping("/join/confirm")
     @ResponseBody
-    public ResponseEntity<String> confirmMail(@RequestParam("mail") String mail) throws Exception {
+    public ResponseEntity<String> confirmMail(HttpServletResponse response, @RequestParam("mail") String mail) throws Exception {
+        log.info("confirmMail 함수 실행");
         String code = mailService.sendSimpleMessage(mail);
         Cookie verificationCookie = new Cookie("verificationCode", code);
         verificationCookie.setMaxAge(180);
@@ -46,8 +42,9 @@ public class MemberController {
         return ResponseEntity.ok(code);
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<Boolean> verifyMail(@RequestParam("verificationCode") String verificationCode,
+    @PostMapping("/join/verify")
+    public ResponseEntity<Boolean> verifyMail(HttpServletRequest request,
+                                              @RequestParam("verificationCode") String verificationCode,
                                               @RequestParam("mail") String mail,
                                               @CookieValue(value = "verificationCode") String storedVerificationCode) {
         HttpSession session = request.getSession();
@@ -65,4 +62,12 @@ public class MemberController {
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok(memberService.login(loginDTO));
     }
+
+    @GetMapping("/nickname")
+    @ResponseBody
+    public ResponseEntity<String> getNickname(@RequestParam Long id) {
+        System.out.println("getNickname 함수 실행");
+        return ResponseEntity.ok(memberService.getNickname(id));
+    }
+
 }

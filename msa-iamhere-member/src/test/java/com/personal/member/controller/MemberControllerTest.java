@@ -7,9 +7,6 @@ import com.personal.member.exception.AppException;
 import com.personal.member.exception.ErrorCode;
 import com.personal.member.service.MailService;
 import com.personal.member.service.MemberService;
-import jakarta.servlet.http.Cookie;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,28 +15,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@Slf4j
 @AutoConfigureMockMvc
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
@@ -114,6 +108,7 @@ class MemberControllerTest {
         // given
         MemberDTO memberDTO = new MemberDTO("gms08194@gmail.com", "asdf1234", new Date(2023 - 01 - 02));
         when(memberService.join(any(MemberDTO.class))).thenThrow(new RuntimeException("he mail is already exist!"));
+        doNothing().when(response).addCookie(any(Cookie.class));
 
         // when
         mockMvc.perform(post("/api/v1/members/join")
@@ -133,7 +128,7 @@ class MemberControllerTest {
 
          mockMvc.perform(post("/api/v1/members/join/confirm")
                         .with(csrf())
-                        .param("mail", to))
+                         .param("mail", to))
                 .andExpect(status().isOk())
                 .andExpect(content().string(key));
     }
@@ -141,7 +136,7 @@ class MemberControllerTest {
     @DisplayName("로그인에 성공한다.")
     @Test
     @WithAnonymousUser
-    void login_success() throws Exception {
+    public void login_success() throws Exception {
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         String token = "token";
@@ -160,7 +155,7 @@ class MemberControllerTest {
     @DisplayName("Id가 존재하지 않아 로그인에 실패한다.")
     @Test
     @WithAnonymousUser
-    void login_notfound() throws Exception{
+    public void login_notfound() throws Exception{
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         LoginDTO loginDTO = new LoginDTO(mail, password);
@@ -176,7 +171,7 @@ class MemberControllerTest {
     @DisplayName("password가 일치하지 않아 로그인에 실패한다.")
     @Test
     @WithAnonymousUser
-    void login_unauthorized() throws Exception{
+    public void login_unauthorized() throws Exception{
         String mail = "asdf1221@naver.com";
         String password = "asdf1234";
         LoginDTO loginDTO = new LoginDTO(mail, password);

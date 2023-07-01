@@ -6,7 +6,7 @@ import com.personal.member.dto.MemberDTO;
 import com.personal.member.exception.AppException;
 import com.personal.member.exception.ErrorCode;
 import com.personal.member.repository.MemberRepository;
-import com.personal.member.utils.JwtTokenUtil;
+import com.personal.member.config.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,10 +34,6 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findById(Long memberId){
-        return memberRepository.findById(memberId);
-    }
-
     private boolean isEmailExists(String mail) {
         Optional<Member> findByMail = memberRepository.findByMail(mail);
         return !findByMail.isEmpty();
@@ -57,5 +53,11 @@ public class MemberService {
         } else {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
+    }
+
+    public String getNickname(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+        return member.getNickname();
     }
 }

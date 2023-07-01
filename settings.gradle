@@ -1,2 +1,3 @@
 rootProject.name = 'iamhere'
 include 'msa-iamhere-member'
+include 'msa-iamhere-post'
