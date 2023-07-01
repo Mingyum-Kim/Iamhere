@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "msa-iamhere-member")
+@FeignClient(value = "MSA-IAMHERE-MEMBER")
 @Component
 public interface MemberApiClient {
     @GetMapping(value = "/nickname")

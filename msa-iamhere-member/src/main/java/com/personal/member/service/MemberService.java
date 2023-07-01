@@ -6,7 +6,7 @@ import com.personal.member.dto.MemberDTO;
 import com.personal.member.exception.AppException;
 import com.personal.member.exception.ErrorCode;
 import com.personal.member.repository.MemberRepository;
-import com.personal.member.utils.JwtTokenUtil;
+import com.personal.member.config.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,10 +32,6 @@ public class MemberService {
         member.setPassword(bCryptPasswordEncoder.encode(memberDTO.getPassword()));
 
         return memberRepository.save(member);
-    }
-
-    public Optional<Member> findById(Long memberId){
-        return memberRepository.findById(memberId);
     }
 
     private boolean isEmailExists(String mail) {

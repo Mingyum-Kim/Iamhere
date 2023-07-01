@@ -1,4 +1,4 @@
-package com.personal.member.utils;
+package com.personal.member.config.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
