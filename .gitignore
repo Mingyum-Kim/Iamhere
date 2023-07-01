@@ -1,4 +1,3 @@
-msa-iamhere-member/src/main/resources/application.yml
 HELP.md
 iamhere.iml
 .env
@@ -40,6 +39,4 @@ out/
 .vscode/
 msa-iamhere-member/src/main/resources/application.yml
 src/main/resources/application.yml
-.env
-.env
-.env
+msa-iamhere-post/src/main/resources/application.yml

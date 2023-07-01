@@ -29,6 +29,12 @@ public class Posts extends CommonDateEntity{
         this.content = content;
     }
 
+    public Posts(String title, String content, String author){
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
+
     public static Posts save(String title, String content){
         return new Posts(title, content);
     }

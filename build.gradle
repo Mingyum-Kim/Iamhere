@@ -1,80 +1,58 @@
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.4'
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.personal'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+allprojects {
+    group = 'com.personal'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
 
-
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-ext {
-    set('springCloudVersion', "2022.0.1")
-}
-
-dependencies {
-    // implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    // implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    // implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
-    // implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    // implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-    // implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    // implementation 'org.springframework.kafka:spring-kafka'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // testImplementation 'org.springframework.kafka:spring-kafka-test'
-    implementation 'mysql:mysql-connector-java:8.0.27'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-allprojects{
-    repositories {
-        mavenCentral()
-        maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
-    }
-}
-
-subprojects{
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.personal'
-    version = '0.0.1-SNAPSHOT'
-    sourceCompatibility = '17'
-    targetCompatibility = '17'
+    ext {
+        set('springCloudVersion', "2022.0.1")
+    }
 
-    dependencies{
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        implementation 'com.fasterxml.jackson.core:jackson-core:2.14.1'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'javax.servlet:javax.servlet-api:4.0.1'
+        implementation 'javax.xml.bind:jaxb-api:2.3.1'
+        implementation 'org.springframework.boot:spring-boot-starter-logging:3.1.0'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
+    }
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+
+    compileJava.options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile){
+        options.encoding = 'UTF-8'
     }
 }
 
-allprojects{
-    dependencies{
-        developmentOnly 'org.springframework.boot:spring-boot-devtools'
-        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-        implementation 'mysql:mysql-connector-java'
-    }
-}

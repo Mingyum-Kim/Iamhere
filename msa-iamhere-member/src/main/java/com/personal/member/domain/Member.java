@@ -20,6 +20,8 @@ public class Member{
 
     private String password;
 
+    private String nickname;
+
     private Date birth;
 
     private LocalDate joinedAt = LocalDate.now();
