@@ -3,10 +3,17 @@ package com.personal.member.config.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
 public class JwtTokenUtil {
+
+    @Value("${jwt.token.secret}")
+    private String secretKey;
+
+    @Value("${jwt.token.expiration}")
+    private Long expiration;
 
     public static String getMail(String token, String secretKey){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)

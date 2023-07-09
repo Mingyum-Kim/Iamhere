@@ -15,13 +15,15 @@ import java.util.Date;
 public class MemberDTO {
     private String mail;
     private String password;
+    private String nickname;
     private Date birth;
 
     public Member toEntity(){
-        Member member = new Member();
-        member.setMail(mail);
-        member.setPassword(password);
-        member.setBirth(birth);
-        return member;
+        return Member.builder()
+                .mail(mail)
+                .password(password)
+                .nickname(nickname)
+                .birth(birth)
+                .build();
     }
 }

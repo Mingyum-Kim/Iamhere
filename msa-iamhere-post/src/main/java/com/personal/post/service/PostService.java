@@ -7,11 +7,12 @@ import com.personal.post.domain.dto.PostResponseDto;
 import com.personal.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService{
@@ -19,9 +20,10 @@ public class PostService{
 
     private final MemberApiClient memberApiClient;
 
-    public Posts save(PostRequestDto dto){
-        String nickname = memberApiClient.getNickname(1L);
-        return postRepository.save(dto.toEntity(nickname));
+    public Posts save(PostRequestDto dto) {
+        Long memberId = memberApiClient.getCurrentMember();
+        log.info("memberId : " + memberId);
+        return postRepository.save(dto.toEntity(memberId));
     }
 
     public Posts update(Long id, PostRequestDto dto) {
