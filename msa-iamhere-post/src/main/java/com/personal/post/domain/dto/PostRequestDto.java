@@ -9,7 +9,7 @@ public class PostRequestDto {
     private String title;
     private String content;
 
-    public Posts toEntity(String author){
-        return new Posts(title, content, author);
+    public Posts toEntity(Long memberId){
+        return new Posts(title, content, memberId);
     }
 }

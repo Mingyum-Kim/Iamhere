@@ -1,5 +1,6 @@
 package com.personal.member.controller;
 
+import com.personal.member.domain.Member;
 import com.personal.member.dto.LoginDTO;
 import com.personal.member.dto.MemberDTO;
 import com.personal.member.service.MailService;
@@ -12,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 
 @Slf4j
 @RestController
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
     private final MailService mailService;
 
     @PostMapping("/join")
@@ -34,7 +34,6 @@ public class MemberController {
     @PostMapping("/join/confirm")
     @ResponseBody
     public ResponseEntity<String> confirmMail(HttpServletResponse response, @RequestParam("mail") String mail) throws Exception {
-        log.info("confirmMail 함수 실행");
         String code = mailService.sendSimpleMessage(mail);
         Cookie verificationCookie = new Cookie("verificationCode", code);
         verificationCookie.setMaxAge(180);
@@ -63,11 +62,16 @@ public class MemberController {
         return ResponseEntity.ok(memberService.login(loginDTO));
     }
 
-    @GetMapping("/nickname")
-    @ResponseBody
-    public ResponseEntity<String> getNickname(@RequestParam Long id) {
-        System.out.println("getNickname 함수 실행");
-        return ResponseEntity.ok(memberService.getNickname(id));
+    @GetMapping("/get-current-member")
+    public Long getCurrentMember(Authentication authentication){
+        log.info("authentication.getName() : " + authentication.getName());
+        Member member = memberService.getMember(authentication.getName());
+        return member.getId();
+    }
+
+    @GetMapping("/hello-world")
+    public String test(){
+        return "Hello, world!";
     }
 
 }

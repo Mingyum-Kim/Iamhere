@@ -1,14 +1,10 @@
 package com.personal.post.domain;
 
-import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -17,26 +13,24 @@ import java.time.LocalDateTime;
 public class Posts extends CommonDateEntity{
     @Id @GeneratedValue
     private Long id;
-
     private String title;
+
+    private Long memberId;
+
+    private String authorName;
 
     private String content;
 
-    private String author;
 
     public Posts(String title, String content){
         this.title = title;
         this.content = content;
     }
 
-    public Posts(String title, String content, String author){
+    public Posts(String title, String content, Long memberId) {
+        this.id = id;
         this.title = title;
-        this.content = content;
-        this.author = author;
-    }
-
-    public static Posts save(String title, String content){
-        return new Posts(title, content);
+        this.memberId = memberId;
     }
 
     public void setTitleContent(String title, String content) {

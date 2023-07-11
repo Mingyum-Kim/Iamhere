@@ -9,6 +9,9 @@ import com.personal.member.repository.MemberRepository;
 import com.personal.member.config.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,9 +58,10 @@ public class MemberService {
         }
     }
 
-    public String getNickname(Long id) {
-        Member member = memberRepository.findById(id)
+    public Member getMember(String mail) {
+        Member member = memberRepository.findByMail(mail)
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
-        return member.getNickname();
+        return member;
     }
+
 }
